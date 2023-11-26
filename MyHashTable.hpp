@@ -41,7 +41,9 @@ namespace CPSC131::MyHashTable
 			 */
 			MyHashTable(size_t capacity = MyHashTable::DEFAULT_CAPACITY)
 			{
-				
+				setCapacity(capacity);
+				size_ = 0;
+				table_ = new std::forward_list<std::pair<std::string, VTYPE>> [DEFAULT_CAPACITY];
 			}
 			
 			/**
@@ -49,7 +51,7 @@ namespace CPSC131::MyHashTable
 			 */
 			MyHashTable(const MyHashTable& other)
 			{
-				
+				//same with increasing size but same size 
 			}
 			
 			/**
@@ -60,7 +62,9 @@ namespace CPSC131::MyHashTable
 			 */
 			~MyHashTable()
 			{
-				
+				if(table is not nullptr)
+				delete array;
+				array = nullptr;
 			}
 			
 			/**
@@ -70,7 +74,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t capacity() const
 			{
-				return 0;
+				return capacity_;
 			}
 			
 			/**
@@ -78,7 +82,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t size() const
 			{
-				return 0;
+				return size_;
 			}
 			
 			/**
@@ -86,7 +90,14 @@ namespace CPSC131::MyHashTable
 			 */
 			bool empty()
 			{
-				return true;
+				if(size_ == 0)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
 			}
 			
 			/**
@@ -94,7 +105,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t n_collisions() const
 			{
-				return 0;
+				return n_collisions;
 			}
 			
 			/**
@@ -168,7 +179,18 @@ namespace CPSC131::MyHashTable
 			 */
 			bool exists(std::string key) const
 			{
-				return false;
+				unsigned long long int b = hash(key);
+				for(auto a : table_)
+				{
+					if(!table_[b].empty())
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				
 			}
 			
 			/**
@@ -186,7 +208,15 @@ namespace CPSC131::MyHashTable
 			 */
 			VTYPE& get(std::string key) const
 			{
+				if(exists == true)
+				{
+				unsigned long long int b = hash(key);
+				return table_[b].second;
+				}
+				else
+				{
 				throw std::runtime_error("Cannot get value for key because it doesn't exist: " + key);
+				}
 			}
 			
 			/**
@@ -215,7 +245,16 @@ namespace CPSC131::MyHashTable
 			 */
 			void remove(std::string key)
 			{
+				if(exists == true)
+				{
+				unsigned long long int b = hash(key);
+				delete table_[b].second;
+				}
+				
+				else
+				{
 				throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
+				}
 			}
 			
 			/**
@@ -224,7 +263,11 @@ namespace CPSC131::MyHashTable
 			 */
 			void clear()
 			{
-				
+				for(auto a : table_)
+				{
+					delete a;
+					a = nullptr;
+				}
 			}
 			
 			/**
@@ -232,6 +275,7 @@ namespace CPSC131::MyHashTable
 			 */
 			MyHashTable<VTYPE>& operator=(const MyHashTable<VTYPE>& other)
 			{
+				//same with increasing size but same size 
 				return *this;
 			}
 			
