@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
+//#include <pair>
 
 
 //	More includes ... ?
@@ -42,8 +43,8 @@ namespace CPSC131::MyHashTable
 			MyHashTable(size_t capacity = MyHashTable::DEFAULT_CAPACITY)
 			{
 				setCapacity(capacity);
-				size_ = 0;
-				table_ = new std::forward_list<std::pair<std::string, VTYPE>> [DEFAULT_CAPACITY];
+				this->size_ = 0;
+				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [capacity];
 			}
 			
 			/**
@@ -52,6 +53,22 @@ namespace CPSC131::MyHashTable
 			MyHashTable(const MyHashTable& other)
 			{
 				//same with increasing size but same size 
+				
+				this->size_ = other.size();
+				
+				this->capacity_ = other.capacity();
+				
+				this->n_collisions_ = other.n_collisions();
+				
+				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [this->capacity_];
+				
+				for ( auto a : other)
+				{
+					for(auto iter = a.begin(); iter != a.end(); iter++)
+					{
+						this->add(iter->first, iter->second );
+					}
+				}
 			}
 			
 			/**
@@ -62,9 +79,11 @@ namespace CPSC131::MyHashTable
 			 */
 			~MyHashTable()
 			{
-				if(table is not nullptr)
-				delete array;
-				array = nullptr;
+				if(this->table_ != nullptr)
+				{
+				delete[] this->table_;
+				this->table_ = nullptr;
+				}
 			}
 			
 			/**
@@ -74,7 +93,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t capacity() const
 			{
-				return capacity_;
+				return this->capacity_;
 			}
 			
 			/**
@@ -82,7 +101,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t size() const
 			{
-				return size_;
+				return this->size_;
 			}
 			
 			/**
@@ -90,7 +109,7 @@ namespace CPSC131::MyHashTable
 			 */
 			bool empty()
 			{
-				if(size_ == 0)
+				if(this->size_ == 0)
 				{
 					return true;
 				}
@@ -105,7 +124,7 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t n_collisions() const
 			{
-				return n_collisions;
+				return this->n_collisions_;
 			}
 			
 			/**
@@ -134,6 +153,23 @@ namespace CPSC131::MyHashTable
 			 */
 			void setCapacity(size_t c)
 			{
+				std::forward_list<std::pair<std::string, VTYPE>>* table_2 = this->table_;
+				
+				this->size_ = 0;
+				
+				this->capacity_ = 0;
+				
+				this->n_collisions_ = 0;
+				
+				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [c];
+				
+				for ( auto a : table_2)
+				{
+					for(auto iter = a.begin(); iter != a.end(); iter++)
+					{
+						this->add(iter->first, iter->second );
+					}
+				}
 				
 			}
 			
@@ -149,7 +185,31 @@ namespace CPSC131::MyHashTable
 			 */
 			unsigned long long int midSquareHash(std::string key) const
 			{
-				return 0;
+				unsigned long long int sum = 1;
+				std::string sA = "";
+				
+				for(auto a:key)
+				{
+					sA += a;
+					unsigned long long int b = std::stoull(sA, nullptr, 10);
+					sum *= b;
+					sum = sum % ULLONG_WRAP_AT;
+				}
+				
+				sum *= sum;
+				std::string stringSum = std::to_string(sum);
+				size_t d = ( stringSum.size() )/2;
+				std::string midStringSum = "";
+				unsigned long long int numStringNum = 0;
+				
+				for(auto c = d/2; c <= d ; d++)
+				{
+					midStringSum += std::to_string(stringSum[d]);
+					numStringNum = std::stoull(midStringSum);
+				}
+				
+				return numStringNum;
+				//return 0;
 			}
 			
 			/**
@@ -157,20 +217,41 @@ namespace CPSC131::MyHashTable
 			 * Four stubs are provided to make experimentation a little easier.
 			 * Only the best hash function will count towards the leaderboard.
 			 */
+			 
 			unsigned long long int myCustomHashFunction1(std::string key) const
 			{
+				//mod 39 then n^2+n+41 to generate a prime
+				//power this prime 
+				//mod ULL
 				return 0;
 			}
+			
 			unsigned long long int myCustomHashFunction2(std::string key) const
 			{
+				//mod 39 then n^2+n+41 to generate a prime
+				//power this prime 
+				//take partition
+				//mod ULL
 				return 0;
 			}
 			unsigned long long int myCustomHashFunction3(std::string key) const
 			{
+				//randomize table[key] address
+				//mod 39 then n^2+n+41 to generate a prime
+				//power this prime 
+				//take partition
+				//mod ULL
 				return 0;
 			}
 			unsigned long long int myCustomHashFunction4(std::string key) const
 			{
+				//randomize table[key] address
+				//flip address
+				//mod 39 then n^2+n+41 to generate a prime
+				//power this prime 
+				//take partition
+				//mod ULL
+				
 				return 0;
 			}
 			
@@ -180,7 +261,10 @@ namespace CPSC131::MyHashTable
 			bool exists(std::string key) const
 			{
 				unsigned long long int b = hash(key);
-				for(auto a : table_)
+				
+				b=b%this->capacity_;
+				
+				for(auto a : this->table_)
 				{
 					if(!table_[b].empty())
 					{
@@ -190,16 +274,26 @@ namespace CPSC131::MyHashTable
 					{
 						return false;
 					}
+				}
 				
 			}
 			
-			/**
-			 * Add a key/value pair to this table.
+			
+			 /* Add a key/value pair to this table.
 			 * If the key already exists, throw a runtime_error.
 			 */
 			void add(std::string key, VTYPE value)
 			{
-				
+				if(this->exist(key) == true)
+				{
+					throw std::runtime_error("Key exists.");
+				}
+				else
+				{
+					unsigned long long int b = hash(key);
+					b=b%this->capacity_;
+					this->table_[b].push_back(key, value);
+				}
 			}
 			
 			/**
@@ -209,14 +303,30 @@ namespace CPSC131::MyHashTable
 			VTYPE& get(std::string key) const
 			{
 				if(exists == true)
-				{
+			{
 				unsigned long long int b = hash(key);
-				return table_[b].second;
+				
+				b=b%capacity_;
+				
+				for ( auto a : this->table_)
+				{
+					for(auto iter = a.begin(); iter == a.end(); iter++)
+					{
+						if(iter->first == b)
+						{
+							return iter->second;
+						}
+					}
 				}
+				
+			}
+				
 				else
 				{
-				throw std::runtime_error("Cannot get value for key because it doesn't exist: " + key);
+				throw std::runtime_error("Cannot get value for key because it doesn't exist: ");
 				}
+				
+			
 			}
 			
 			/**
@@ -232,9 +342,23 @@ namespace CPSC131::MyHashTable
 			 * 	as a last step before returning them.
 			 * 	Try using the built-in method std::forward_list::sort
 			 */
+			 
 			std::forward_list<std::string> getAllKeys(bool sorted = false) const
 			{
 				std::forward_list<std::string> keys;
+				
+				for ( auto a : table_)
+				{
+					for(auto iter = a.begin(); iter != a.end(); iter++)
+					{
+						keys.push_front(*iter);
+					}
+				}
+				
+				if(sorted == true)
+				{
+					throw std::runtime_error("Need to implement sort function.");
+				}
 				
 				return keys;
 			}
@@ -245,10 +369,20 @@ namespace CPSC131::MyHashTable
 			 */
 			void remove(std::string key)
 			{
-				if(exists == true)
+				if(exists() == true)
 				{
-				unsigned long long int b = hash(key);
-				delete table_[b].second;
+				
+				for (auto a : table_)
+				{
+					for(auto iter = a.begin(); iter != a.end(); iter++)
+					{
+						if(iter->first == key)
+						{
+							a.erase(iter);
+						}
+					}
+				}
+				
 				}
 				
 				else
@@ -265,8 +399,7 @@ namespace CPSC131::MyHashTable
 			{
 				for(auto a : table_)
 				{
-					delete a;
-					a = nullptr;
+					a.clear();
 				}
 			}
 			
@@ -276,10 +409,20 @@ namespace CPSC131::MyHashTable
 			MyHashTable<VTYPE>& operator=(const MyHashTable<VTYPE>& other)
 			{
 				//same with increasing size but same size 
+				std::forward_list<std::pair<std::string, VTYPE>>* table_2 = table_;
+				this->setCapacity(this->capacity_*2);
+				for ( auto a : table_2)
+				{
+					for(auto iter = a.begin(); iter == a.end(); iter++)
+					{
+						a.pop_back(iter);
+					}
+				}
 				return *this;
 			}
 			
 		//
+		
 		private:
 			
 			/**
@@ -313,9 +456,16 @@ namespace CPSC131::MyHashTable
 			 *   where the first part of the pair is the key and the second
 			 *   is the value (of type VTYPE).
 			 */
+			 
 			std::forward_list<std::pair<std::string, VTYPE>> * table_ = nullptr;
+			
 	};
+	
 }
+
+
+
+
 
 
 
