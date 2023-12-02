@@ -153,7 +153,9 @@ namespace CPSC131::MyHashTable
 			 */
 			void setCapacity(size_t c)
 			{
-				std::forward_list<std::pair<std::string, VTYPE>>* table_2 = this->table_;
+				
+				
+				auto table_2 = this->table_;
 				
 				this->size_ = 0;
 				
@@ -165,11 +167,12 @@ namespace CPSC131::MyHashTable
 				
 				for ( auto a : table_2)
 				{
-					for(auto iter = a.begin(); iter != a.end(); iter++)
+					for (auto iter = a.begin(); iter != a.end(); iter++)
 					{
 						this->add(iter->first, iter->second );
 					}
 				}
+				
 				
 			}
 			
