@@ -9,6 +9,7 @@
 
 //
 #include "MyRolodex.hpp"
+#include "MyHashTable.hpp"
 
 
 //
@@ -22,7 +23,7 @@ using CPSC131::MyRolodex::MyRolodex;
 using std::cin, std::cout, std::endl;
 using std::string, std::to_string;
 
-
+using CPSC131::MyHashTable::MyHashTable;
 //	Proto
 string askKey();
 void addEntry(MyRolodex& dex);
@@ -34,6 +35,7 @@ void existsEntry(const MyRolodex& dex);
 //
 int main()
 {
+	/*
 	//
 	cout << "Welcome to the MyRolodex Text User Interface!" << endl;
 	
@@ -158,9 +160,23 @@ void existsEntry(const MyRolodex& dex)
 	cout << "That person " << (dex.exists(key) ? "exists" : "does not exist") << " in the rolodex" << endl;
 }
 
+*/
 
+MyHashTable<int> table3;
+table3.add("ab", 1);
+table3.add("bc", 2);
+table3.add("cd", 3);
+table3.add("de", 4);
+cout<<table3.size()<<endl;
+cout<<table3.capacity()<<endl;
+cout<<table3.exists("de")<<endl;
 
-
+table3.remove("ab");
+table3.remove("de");
+cout<<table3.size()<<endl;
+cout<<table3.capacity()<<endl;
+cout<<table3.exists("de")<<endl;
+}
 
 
 
