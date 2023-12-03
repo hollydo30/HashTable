@@ -62,23 +62,18 @@ namespace CPSC131::MyHashTable
 				
 				size_t list = 0;
 				
-			
 				if(other.size() == 0)
 				{
-				
 					while (list <= this->capacity_)
-				
 					{
 				
-						auto iter = other[list].begin();
+						auto iter = (other.getTable()) [list].begin();
 				
-						auto end = other[list].end();
+						auto end = (other.getTable()) [list].end();
 				
 						for(;iter != end; ++iter)
 						{
-					
 						this->add(iter->first, iter->second );
-					
 						}
 				
 						list++;
@@ -87,7 +82,6 @@ namespace CPSC131::MyHashTable
 				}
 			
 			}
-			
 			
 			/**
 			 * Destructor
@@ -125,7 +119,7 @@ namespace CPSC131::MyHashTable
 			/**
 			 * Return true if the table is empty, false otherwise
 			 */
-			bool empty()
+			bool empty() const
 			{
 				if(this->size_ == 0)
 				{
@@ -146,7 +140,7 @@ namespace CPSC131::MyHashTable
 			}
 			
 			
-			std::forward_list<std::pair<std::string, VTYPE>>* getTable()
+			std::forward_list<std::pair<std::string, VTYPE>>* getTable() const
 			{
 				return this->table_;
 			}
