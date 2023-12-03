@@ -13,7 +13,7 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
-//#include <pair>
+#include <utility>
 
 
 //	More includes ... ?
@@ -157,23 +157,41 @@ namespace CPSC131::MyHashTable
 				
 				auto table_2 = this->table_;
 				
-				this->size_ = 0;
+				//this->size_ = 0;
 				
-				this->capacity_ = 0;
+				//this->capacity_ = 0;
 				
-				this->n_collisions_ = 0;
+				//this->n_collisions_ = 0;
 				
 				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [c];
 				
-				for ( auto a : table_2)
+				size_t list = 0;
+				
+				if(table_2 != nullptr)
+			{
+				
+				while (list <= this->capacity_)
+				
 				{
-					for (auto iter = a.begin(); iter != a.end(); iter++)
-					{
+				
+				auto iter = table_2[list].begin();
+				
+				auto end = table_2[list].end();
+				
+				
+				
+				for(;iter != end; ++iter)
+				{
+					
 						this->add(iter->first, iter->second );
-					}
+					
 				}
 				
+				list++;
+				}
 				
+			}
+			
 			}
 			
 			///	Your welcome
@@ -263,22 +281,23 @@ namespace CPSC131::MyHashTable
 			 */
 			bool exists(std::string key) const
 			{
+				
+				bool result = false;
+				
 				unsigned long long int b = hash(key);
 				
-				b=b%this->capacity_;
-				
-				for(auto a : this->table_)
-				{
+				b=b%(this->capacity_);
+			
 					if(!table_[b].empty())
 					{
-						return true;
+						result = true;
 					}
 					else
 					{
-						return false;
+						result = false;
 					}
-				}
-				
+					
+				return result;
 			}
 			
 			
@@ -287,7 +306,8 @@ namespace CPSC131::MyHashTable
 			 */
 			void add(std::string key, VTYPE value)
 			{
-				if(this->exist(key) == true)
+				auto newPair = std::make_pair(key,value);
+				if( exists(key) == true ) 
 				{
 					throw std::runtime_error("Key exists.");
 				}
@@ -295,7 +315,7 @@ namespace CPSC131::MyHashTable
 				{
 					unsigned long long int b = hash(key);
 					b=b%this->capacity_;
-					this->table_[b].push_back(key, value);
+					this->table_[b].push_front(newPair);
 				}
 			}
 			
@@ -305,22 +325,41 @@ namespace CPSC131::MyHashTable
 			 */
 			VTYPE& get(std::string key) const
 			{
-				if(exists == true)
+				if(exists(key) == true)
 			{
 				unsigned long long int b = hash(key);
 				
 				b=b%capacity_;
 				
-				for ( auto a : this->table_)
+				size_t list = 0;
+				
+				
+				if(table_ != nullptr)
+			{
+				
+				while (list <= this->capacity_)
+				
 				{
-					for(auto iter = a.begin(); iter == a.end(); iter++)
-					{
-						if(iter->first == b)
+				
+				auto iter = table_[list].begin();
+				
+				auto end = table_[list].end();
+				
+				
+				
+				for(;iter != end; ++iter)
+				{
+					
+						if(iter->first == key)
 						{
 							return iter->second;
 						}
-					}
+		
 				}
+				
+				list++;
+				}
+				
 				
 			}
 				
@@ -328,8 +367,8 @@ namespace CPSC131::MyHashTable
 				{
 				throw std::runtime_error("Cannot get value for key because it doesn't exist: ");
 				}
-				
-			
+			}
+			return iter;
 			}
 			
 			/**
@@ -350,43 +389,80 @@ namespace CPSC131::MyHashTable
 			{
 				std::forward_list<std::string> keys;
 				
-				for ( auto a : table_)
+				size_t list = 0;
+				
+				if(table_ != nullptr)
+			{
+				
+				while (list <= this->capacity_)
+				
 				{
-					for(auto iter = a.begin(); iter != a.end(); iter++)
-					{
+				
+				auto iter = table_[list].begin();
+				
+				auto end = table_[list].end();
+				
+				
+				
+				for(;iter != end; ++iter)
+				{
+					
 						keys.push_front(*iter);
-					}
+					
 				}
+				
+				list++;
+				}
+				
 				
 				if(sorted == true)
 				{
 					throw std::runtime_error("Need to implement sort function.");
 				}
 				
+			}	
 				return keys;
-			}
 			
+			
+			}
 			/**
 			 * Remove a key/value pair that corresponds to the provided key.
 			 * If no such key exists, throw a runtime_error.
 			 */
 			void remove(std::string key)
 			{
-				if(exists() == true)
+				size_t list =0;
+				
+				if(exists(key) == true)
+			{
+					
+				if(table_ != nullptr)
+			{
+				
+				while (list <= this->capacity_)
+				
 				{
 				
-				for (auto a : table_)
+				auto iter = table_[list].begin();
+				
+				auto end = table_[list].end();
+				
+				
+				
+				for(;iter != end; ++iter)
 				{
-					for(auto iter = a.begin(); iter != a.end(); iter++)
-					{
+					
 						if(iter->first == key)
 						{
-							a.erase(iter);
+							table_[list].erase(iter);
 						}
-					}
+					
 				}
 				
+				list++;
 				}
+				
+			}
 				
 				else
 				{
@@ -394,6 +470,7 @@ namespace CPSC131::MyHashTable
 				}
 			}
 			
+		}
 			/**
 			 * Remove all entries in this table
 			 * Iterate over each table row and call clear on the row's list
