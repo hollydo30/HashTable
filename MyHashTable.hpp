@@ -60,9 +60,10 @@ namespace CPSC131::MyHashTable
 				
 				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [this->capacity_];
 				
-				size_t list = 0;
+				//size_t list = 0;
 				
-				if(other.size() != 0)
+				/*
+				 if(other.size() != 0)
 				{
 					while (list <= this->capacity_)
 					{
@@ -80,6 +81,7 @@ namespace CPSC131::MyHashTable
 					}
 				
 				}
+				*/
 			
 			}
 			
@@ -136,8 +138,30 @@ namespace CPSC131::MyHashTable
 			 */
 			size_t n_collisions() const
 			{
-				return this->n_collisions_;
+				
+				
+				size_t col = 0;
+				
+			/*	size_t list = 0;
+				
+				if(this->size() != 0)
+			{
+				
+					while (list <= this->capacity_)
+				
+					{
+						
+					col += distance( table_[list].begin(), table_[list].end() );
+				
+					list++;
+					
+					}
 			}
+			*/
+				return col;
+			
+			}
+			
 			
 			
 			std::forward_list<std::pair<std::string, VTYPE>>* getTable() const
@@ -173,7 +197,7 @@ namespace CPSC131::MyHashTable
 			void setCapacity(size_t c)
 			{
 				
-				auto table_2 = this->table_;
+				//auto table_2 = this->table_;
 				
 				//this->size_ = 0;
 				
@@ -181,8 +205,9 @@ namespace CPSC131::MyHashTable
 				
 				//this->n_collisions_ = 0;
 				
-				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [c];
 				
+				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [c];
+				/*
 				size_t list = 0;
 				
 				if(table_2 != nullptr)
@@ -207,7 +232,7 @@ namespace CPSC131::MyHashTable
 					}
 				
 				}
-				
+				*/
 				this->capacity_ = c;
 			
 			}
@@ -323,11 +348,14 @@ namespace CPSC131::MyHashTable
 				bool exists(std::string key) const
 			{
 				
-				unsigned long long int b = hash(key);
+			/*	unsigned long long int b = hash(key);
 				
 				auto iter = table_[b].begin();
 				
 				auto end = table_[b].end();
+				
+				if(!table_[b].empty())
+				{
 				
 						for(;iter != end; ++iter)
 						{
@@ -336,7 +364,8 @@ namespace CPSC131::MyHashTable
 								return true;
 							}
 						}
-				
+				}
+			*/
 				return false;
 			}
 			
@@ -367,7 +396,7 @@ namespace CPSC131::MyHashTable
 			VTYPE& get(std::string key) const
 			{
 				static VTYPE second;
-				
+				/*
 				if(exists(key) == true)
 				{
 				
@@ -394,7 +423,7 @@ namespace CPSC131::MyHashTable
 				{
 				throw std::runtime_error("Cannot get value for key because it doesn't exist: ");
 				}
-			
+			*/
 			return second;	
 			}
 			
@@ -459,7 +488,7 @@ namespace CPSC131::MyHashTable
 			 */
 			void remove(std::string key)
 			{
-				
+				/*
 				
 				if(exists(key) == true)
 			{
@@ -491,7 +520,7 @@ namespace CPSC131::MyHashTable
 			{
 				throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
 			}
-			
+			*/
 			
 			}
 			
