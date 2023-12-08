@@ -172,16 +172,21 @@ table3.add("de.", 6);
 cout<<table3.size()<<endl;
 cout<<table3.capacity()<<endl;
 cout<<table3.n_collisions()<<endl;
-cout<<table3.exists("de")<<endl;
-cout<<table3.hash("ab")<<endl;
-cout<<table3.get("ab")<<endl;
+cout<<table3.exists("ab")<<endl;
+//cout<<((table3.getTable())[0].begin())->first<<endl;
+//cout<<((table3.getTable())[0].begin())->second<<endl;
 
-table3.remove("ab");
-table3.remove("cd'");
+table3.setCapacity(100000);
+
+
+//table3.remove("ab");
+//table3.remove("cd'");
 cout<<table3.size()<<endl;
+
 cout<<table3.capacity()<<endl;
+cout<<table3.exists("ab")<<endl;
 cout<<table3.n_collisions()<<endl;
-cout<<table3.exists("de")<<endl;
+cout<<table3.exists("ab")<<endl;
 }
 
 

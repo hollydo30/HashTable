@@ -25,7 +25,14 @@ namespace CPSC131::MyRolodex
 	 */
 	bool MyRolodex::exists(std::string name) const
 	{
+		if(table_.exists(name) == true)
+		{
+		return true;
+		}
+		else
+		{
 		return false;
+		}	
 	}
 	
 	/**
@@ -34,7 +41,14 @@ namespace CPSC131::MyRolodex
 	 */
 	void MyRolodex::add(std::string name, std::string line1, std::string line2, std::string city, std::string state, int zip, std::string country)
 	{
-		
+		Address address;
+		address.line1 = line1;
+		address.line1 = line2;
+		address.city = city;
+		address.state = state;
+		address.zip = zip;
+		address.country = country;
+		table_.add(name, address);
 	}
 	
 	/**
@@ -44,7 +58,7 @@ namespace CPSC131::MyRolodex
 	 */
 	void MyRolodex::add(std::string name, Address address)
 	{
-		
+		this->add(name, address.line1, address.line2, address.city, address.state, address.zip, address.country);
 	}
 	
 	/**
@@ -52,7 +66,8 @@ namespace CPSC131::MyRolodex
 	 */
 	Address MyRolodex::get(std::string name) const
 	{
-		return Address();
+		
+		return table_.get(name);
 	}
 	
 	/**
@@ -60,7 +75,7 @@ namespace CPSC131::MyRolodex
 	 */
 	void MyRolodex::remove(std::string name)
 	{
-		
+		table_.remove(name);
 	}
 	
 	/**
@@ -69,7 +84,7 @@ namespace CPSC131::MyRolodex
 	 */
 	void MyRolodex::clear()
 	{
-		
+		table_.clear();
 	}
 	
 	/**
@@ -77,7 +92,10 @@ namespace CPSC131::MyRolodex
 	 */
 	bool MyRolodex::empty()
 	{
+		if(table_.empty() == true)
 		return true;
+		else
+		return false;
 	}
 	
 	/**
@@ -85,7 +103,7 @@ namespace CPSC131::MyRolodex
 	 */
 	size_t MyRolodex::size()
 	{
-		return 0;
+		return table_.size();
 	}
 }
 
