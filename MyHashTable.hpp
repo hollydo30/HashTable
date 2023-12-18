@@ -12,6 +12,8 @@
 #include <functional>
 #include <memory>
 #include <string>
+#include <string_view>
+#include <numeric>
 #include <stdexcept>
 #include <utility>
 
@@ -57,8 +59,9 @@ namespace CPSC131::MyHashTable
 			MyHashTable(const MyHashTable& other)
 			{
 				//same with increasing size but same size 
-			
-				this->size_ = other.size();
+				
+				/*
+				this->size_ = 0;
 				
 				this->capacity_ = other.capacity();
 				
@@ -66,11 +69,13 @@ namespace CPSC131::MyHashTable
 				
 				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [this->capacity_];
 				
+				
+				 
 				size_t list = 0;
 				
 				 if(other.size() != 0)
 				{
-					while (list <= this->capacity_)
+					while (list < this->capacity_)
 					{
 				
 						auto iter = (other.getTable()) [list].begin();
@@ -79,11 +84,56 @@ namespace CPSC131::MyHashTable
 				
 						for(;iter != end; ++iter)
 						{
-						this->add(iter->first, iter->second );
+						//this->add(iter->first, iter->second );
+						auto newPair = std::make_pair((*iter).first, (*iter).second);
+						table_[list].push_front(newPair);
+						size_++;
 						}
 				
 						list++;
 					}
+				
+				}
+				
+				*/
+				
+				
+				this->capacity_ = other.capacity();
+				
+				this->n_collisions_ = 0;
+				
+				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [this->capacity_];
+				
+				
+				size_t list = 0;
+				
+				// if(other.size() != 0)
+				//{
+					this->size_ = 0;
+					while ( list < this->capacity_ )
+					{
+				
+						
+						 for(const auto& a : (other.getTable())[list])
+						{
+							this->add(a.first, a.second );
+						}
+			
+						list++;
+						
+						
+						/*
+						auto iter = (other.getTable())[list].begin();
+						auto end = (other.getTable())[list].end();
+						for(;iter!=end; ++iter)
+						{
+							this->add(iter->first, iter->second);
+						}
+						list++;
+						*/
+						
+						
+					//}
 				
 				}
 				
@@ -148,40 +198,52 @@ namespace CPSC131::MyHashTable
 				
 				size_t list = 0;
 				
-				if(this->size() != 0)
+				if(this->size() > 1)
 			{
-				
 					while (list < this->capacity_)
-				
 					{
 						size_t col = 0;
-						
-						auto iter = table_[list].begin();
 				
-						auto end = table_[list].end();
-				
-						for(;iter != end; ++iter)
+						/*for(const auto& a: table_[list])
 						{
-					
-						col++;
-					
+							std::string b = a.first;
+							col++;
 						}
 						
-						if(col>=2)
+						while ( list < this->capacity_ )
+					{*/
+				
+						/*
+						 for(const auto& a : other[list])
+						{
+							this->add(a.first, a.second );
+						}
+			
+						list++;
+						*/
+						
+						auto iter = table_[list].begin();
+						auto end = table_[list].end();
+						for(;iter!=end; ++iter)
+						{
+							col++;
+						}
+						
+						
+						if(col>=1)
 						{
 						col--;
 						collision += col;
 						}
 				
-					list++;
-					
+						list++;
 					}
+					
 			}
 			
 				return collision;
 			
 			}
-			
 			
 			
 			std::forward_list<std::pair<std::string, VTYPE>>* getTable() const
@@ -216,7 +278,8 @@ namespace CPSC131::MyHashTable
 			 */
 			void setCapacity(size_t c)
 			{
-				/*
+				
+				
 				auto table_2 = this->table_;
 				
 				this->table_ = new std::forward_list<std::pair<std::string, VTYPE>> [c];
@@ -224,29 +287,34 @@ namespace CPSC131::MyHashTable
 				size_t list = 0;
 				
 				this->size_ = 0;
-				
-				if(table_2 != nullptr)
-				{
-				
+					
 					while (list < this->capacity_)
-				
 					{
-				
-						auto iter = table_2[list].begin();
-				
-						auto end = table_2[list].end();
-				
-						for(;iter != end; ++iter)
+					
+						
+						/*auto iter = table_[list].begin();
+						auto end = table_[list].end();
+						for(;iter!=end; ++iter)
 						{
-					
-						this->add((*iter).first, (*iter).second );
-					
+							auto newPair = std::make_pair((*iter).first, (*iter).second);
+							table_[list].push_front(newPair);
+							size_++;
 						}
-				
+							
+								auto newPair = std::make_pair(b.first, b.second);
+								table_[list].push_frnt(newPair);
+								size_++;
+							
+						}
+						*/
+					
 						list++;
 					}
+					
+			
 				
-				}
+				
+				
 				
 				this->capacity_ = c;
 				
@@ -255,7 +323,7 @@ namespace CPSC131::MyHashTable
 				delete[] table_2;
 				
 				table_2 = nullptr;
-			*/
+			
 			}
 			
 			///	Your welcome
@@ -345,55 +413,27 @@ namespace CPSC131::MyHashTable
 			/**
 			 * Return true if a key exists in the table, or false otherwise.
 			 */
-			
-				
-			/*	bool result = false;
-				
-				unsigned long long int b = hash(key);
-				
-				if(this->capacity_ != 0)
-				{
-				b=b%(this->capacity_);
-				}
-			
-					if(!table_[b].empty())
-					{
-						result = true;
-					}
-					else
-					{
-						result = false;
-					}
-				*/	
-				
+		
 				bool exists(std::string key) const
 			{
-				/*
+				
 				unsigned long long int b = hash(key);
 				
-				auto iter = table_[b].begin();
-				
-				auto end = table_[b].end();
-				
-				if(iter == end)
+				if(table_[b].empty() != true)
 				{
-					return false;
-				}
-				else
-				{
-						for(;iter != end; ++iter)
+					for(const auto& a: table_[b])
+					{
+						if(a.first == key)
 						{
-							if((*iter).first == key)
-							{
-								return true;
-							}
+						return true;
 						}
-					
-					return false;
+					}
 				}
-				*/
-				return true;
+				return false;
 			}
+				
+				
+			
 			
 			
 			
@@ -402,8 +442,7 @@ namespace CPSC131::MyHashTable
 			 */
 			void add(std::string key, VTYPE value)
 			{
-				/*
-				auto newPair = std::make_pair(key,value);
+				auto newPair = std::make_pair(key, value);
 				if( exists(key) == true ) 
 				{
 					throw std::runtime_error("Key exists.");
@@ -414,8 +453,8 @@ namespace CPSC131::MyHashTable
 					
 					this->table_[b].push_front(newPair);
 				}
+				
 				size_++;
-				*/
 			}
 			
 			/**
@@ -425,26 +464,26 @@ namespace CPSC131::MyHashTable
 			VTYPE& get(std::string key) const
 			{
 				static VTYPE second;
-				/*
+				
 				if(exists(key) == true)
 				{
 				
 					unsigned long long int b = hash(key);
 					
-					auto iter = table_[b].begin();
-				
-					auto end = table_[b].end();
-				
-					for(;iter != end; ++iter)
-					
+					if(table_[b].empty() != true)
 					{
-					
-						if(iter->first == key)
+				
+						for(const auto& a: table_[b])
 						{
-							second = iter->second;
+							if(a.first == key)
+							{
+							second = a.second;
+							}
 						}
-		
+					
 					}
+					
+					return second;
 				
 				}
 				
@@ -452,8 +491,7 @@ namespace CPSC131::MyHashTable
 				{
 				throw std::runtime_error("Cannot get value for key because it doesn't exist: ");
 				}
-			*/
-			return second;	
+			
 			}
 			
 			/**
@@ -474,13 +512,12 @@ namespace CPSC131::MyHashTable
 			{
 				std::forward_list<std::string> keys;
 				
-			/*
 			 	size_t list = 0;
 				
 				if(table_ != nullptr)
 			{
 				
-					while (list <= this->capacity_)
+					while (list < this->capacity_)
 				
 					{
 				
@@ -491,7 +528,7 @@ namespace CPSC131::MyHashTable
 						for(;iter != end; ++iter)
 						{
 					
-						keys.push_front(*iter);
+						keys.push_front(iter->first);
 					
 						}
 				
@@ -502,11 +539,11 @@ namespace CPSC131::MyHashTable
 				
 					if(sorted == true)
 					{
-					throw std::runtime_error("Need to implement sort function.");
+						keys.sort();
 					}
 				
 			}	
-			*/
+			
 				return keys;
 			
 			
@@ -516,23 +553,90 @@ namespace CPSC131::MyHashTable
 			 * If no such key exists, throw a runtime_error.
 			 */
 			void remove(std::string key)
-			{
+		    
+		    {
+			   /*
+			    unsigned long long int b = hash(key);
+			
+				if(table_[b].empty() != true)
+				{
+					
+					for(auto a : table_[b])
+					{
+						if(a.first == key)
+						{
+							std::erase(table_[b], a);
+							size_--;
+						}
+					}
+					
+					
+					auto iter = table_[b].begin();
+					auto prev = table_[b].before_begin();
+					auto end = table_[b].end();
 				
-				if(exists(key) == true)
-			{
-				//unsigned long long int b = hash(key);
+						for(;iter != end; ++iter)
+						{
+						
+						if(iter->first == key)
+						{
+							table_[b].erase_after(prev); 
+							//table_[b].clear();
+						}
+						prev = iter;
+						
+						}
 				
-				//delete table_[b];
+				}
+				else
+				{
+					//throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
+				}
+				*/
+				
+			}
+			
+			
+			/*
+		
+			if(exists(key) == true)
+			{
+				unsigned long long int b = hash(key);
+				//auto iter = table_[b].begin();
+				//auto prev = table_[b].before_begin();
+				
+				if(table_[b].empty() == false)
+				{
+				
+				for(const auto& a : table_[b])
+				{
+				//	prev = iter;
+				
+					if(a.first == key)
+					{
+						//delete table_[b];
+						//table_[b].erase_after(prev);
+					}
+					//prev = iter;
+					//iter++;
+					
+				}
+				
+				
+				}
+				
+				size_--;
 				
 			 }
 				else
 			 {
-				throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
+				//throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
 			 }
 			
+			*/
 			
-			}
-			
+		
+		
 		
 			/**
 			 * Remove all entries in this table
@@ -542,13 +646,12 @@ namespace CPSC131::MyHashTable
 			{
 				size_t list = 0;
 				
-				if(this->size() != 0)
+				if(this->size() > 0)
 				{
 				
 					while (list < this->capacity_)
 				
 					{
-				
 						table_[list].clear();
 						list++;
 					}
@@ -561,8 +664,10 @@ namespace CPSC131::MyHashTable
 			 */
 			MyHashTable<VTYPE>& operator=(const MyHashTable<VTYPE>& other)
 			{
-				this = MyHashTable(other);
-				return *this;
+				MyHashTable<VTYPE>& newHash(other);
+				//this = MyHashTable(other);
+				return newHash;
+				//return *this;
 			}
 			
 		//

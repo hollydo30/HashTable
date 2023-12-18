@@ -173,20 +173,66 @@ cout<<table3.size()<<endl;
 cout<<table3.capacity()<<endl;
 cout<<table3.n_collisions()<<endl;
 cout<<table3.exists("ab")<<endl;
+cout<<table3.exists("bcc")<<endl;
+cout<<table3.exists("cd")<<endl;
+cout<<table3.exists("dee")<<endl;
+cout<<table3.exists("cd'")<<endl;
+cout<<table3.exists("de..")<<endl;
+cout<<endl;
+
+MyHashTable<int> table4 (table3);
+cout<<table4.size()<<endl;
+cout<<table4.capacity()<<endl;
+cout<<table4.n_collisions()<<endl;
+cout<<table4.exists("ab")<<endl;
+cout<<table4.exists("bcc")<<endl;
+cout<<table4.exists("cd")<<endl;
+cout<<table4.exists("dee")<<endl;
+cout<<table4.exists("cd'")<<endl;
+cout<<table4.exists("de..")<<endl;
+cout<<endl;
 //cout<<((table3.getTable())[0].begin())->first<<endl;
 //cout<<((table3.getTable())[0].begin())->second<<endl;
+MyHashTable<int> table5 = table4;
+cout<<table5.size()<<endl;
+cout<<table5.capacity()<<endl;
+cout<<table5.n_collisions()<<endl;
+cout<<table5.exists("ab")<<endl;
+cout<<table5.exists("bcc")<<endl;
+cout<<table5.exists("cd")<<endl;
+cout<<table5.exists("dee")<<endl;
+cout<<table5.exists("cd'")<<endl;
+cout<<table5.exists("de..")<<endl;
+cout<<endl;
 
-table3.setCapacity(100000);
+table5.setCapacity(100000);
+cout<<table5.size()<<endl;
+cout<<table5.capacity()<<endl;
+cout<<table5.n_collisions()<<endl;
+cout<<endl;
 
-
-//table3.remove("ab");
-//table3.remove("cd'");
+table3.remove("ab");
+table3.remove("bc");
+table3.remove("cd");
+table3.remove("de");
 cout<<table3.size()<<endl;
-
 cout<<table3.capacity()<<endl;
-cout<<table3.exists("ab")<<endl;
 cout<<table3.n_collisions()<<endl;
 cout<<table3.exists("ab")<<endl;
+cout<<table3.exists("bc")<<endl;
+cout<<table3.exists("cd")<<endl;
+cout<<table3.exists("de")<<endl;
+cout<<table3.exists("cd'")<<endl;
+cout<<table3.exists("de.")<<endl;
+
+
+std::forward_list<std::string> keys3 = table3.getAllKeys(true);
+for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
+{
+	cout<<*iter;
+	cout<<endl;
+}
+
 }
 
 

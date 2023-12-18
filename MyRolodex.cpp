@@ -43,7 +43,7 @@ namespace CPSC131::MyRolodex
 	{
 		Address address;
 		address.line1 = line1;
-		address.line1 = line2;
+		address.line2 = line2;
 		address.city = city;
 		address.state = state;
 		address.zip = zip;
