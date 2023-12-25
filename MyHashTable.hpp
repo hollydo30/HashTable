@@ -414,9 +414,9 @@ namespace CPSC131::MyHashTable
 			 * Return true if a key exists in the table, or false otherwise.
 			 */
 		
-				bool exists(std::string key) const
+			bool exists(std::string key) const
+			
 			{
-				
 				unsigned long long int b = hash(key);
 				
 				if(table_[b].empty() != true)
@@ -432,14 +432,11 @@ namespace CPSC131::MyHashTable
 				return false;
 			}
 				
-				
-			
-			
-			
 			
 			 /* Add a key/value pair to this table.
 			 * If the key already exists, throw a runtime_error.
 			 */
+			 
 			void add(std::string key, VTYPE value)
 			{
 				auto newPair = std::make_pair(key, value);
@@ -477,7 +474,9 @@ namespace CPSC131::MyHashTable
 						{
 							if(a.first == key)
 							{
+								
 							second = a.second;
+			
 							}
 						}
 					
@@ -555,46 +554,63 @@ namespace CPSC131::MyHashTable
 			void remove(std::string key)
 		    
 		    {
-			   /*
 			    unsigned long long int b = hash(key);
+			    
+			    b=b%capacity_;
 			
-				if(table_[b].empty() != true)
+				if(table_[b].empty() == false)
+				
 				{
-					
+				
+				/*
+				 {
 					for(auto a : table_[b])
 					{
 						if(a.first == key)
 						{
-							std::erase(table_[b], a);
+							delete a;
 							size_--;
 						}
 					}
-					
-					
+				}
+				
+				*/
 					auto iter = table_[b].begin();
 					auto prev = table_[b].before_begin();
 					auto end = table_[b].end();
 				
-						for(;iter != end; ++iter)
-						{
+					for(;iter != end; ++iter)
+					{
+						
 						
 						if(iter->first == key)
 						{
+							
 							table_[b].erase_after(prev); 
 							//table_[b].clear();
+							--size_;
+							break;
 						}
-						prev = iter;
 						
+						else
+						{
+						prev = iter;
 						}
-				
+						
+						
+					}
+					
+					
 				}
+					
+				
 				else
-				{
-					//throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
-				}
-				*/
 				
-			}
+				{
+					throw std::runtime_error("Cannot remove value for key because it doesn't exist: " + key);
+				}
+				
+			} 
 			
 			
 			/*
