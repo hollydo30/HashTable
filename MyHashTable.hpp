@@ -591,7 +591,7 @@ namespace CPSC131::MyHashTable
 							--size_;
 							break;
 						}
-						
+						//DONT'T INCREMENT A NULL POINTER!!! DOUBLE AN ACTION WILL CAUSE SEG FAULT!!TRACE VARIABLE USING STEP TABLE!!
 						else
 						{
 						prev = iter;

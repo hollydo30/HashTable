@@ -233,6 +233,12 @@ for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
 	cout<<endl;
 }
 
+std::forward_list<std::string> count = table3.getAllKeys(true);
+for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
+{
+	cout<<*iter;
+	cout<<endl;
+}
 }
 
 
