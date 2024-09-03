@@ -42,7 +42,7 @@ namespace CPSC131::MyHashTable
 			 * 
 			 *   1. Call on setCapacity() to set the table's capacity
 			 */
-			MyHashTable(size_t capacity = MyHashTable::DEFAULT_CAPACITY)
+  			MyHashTable(size_t capacity = MyHashTable::DEFAULT_CAPACITY)
 			{
 				this->size_ = 0;
 				
@@ -107,8 +107,6 @@ namespace CPSC131::MyHashTable
 				
 				size_t list = 0;
 				
-				// if(other.size() != 0)
-				//{
 					this->size_ = 0;
 					while ( list < this->capacity_ )
 					{
@@ -132,9 +130,6 @@ namespace CPSC131::MyHashTable
 						list++;
 						*/
 						
-						
-					//}
-				
 				}
 				
 			
@@ -252,6 +247,10 @@ namespace CPSC131::MyHashTable
 			}
 			
 			
+			size_t getCollisions() const
+			{
+				return this->n_collisions_;
+			}
 			/**
 			 * Set the capacity for this table.
 			 * Changes the total number of hash table rows available.
@@ -555,8 +554,6 @@ namespace CPSC131::MyHashTable
 		    
 		    {
 			    unsigned long long int b = hash(key);
-			    
-			    b=b%capacity_;
 			
 				if(table_[b].empty() == false)
 				
@@ -660,19 +657,16 @@ namespace CPSC131::MyHashTable
 			 */
 			void clear()
 			{
-				size_t list = 0;
 				
-				if(this->size() > 0)
-				{
-				
-					while (list < this->capacity_)
+					for( size_t i = 0; i<this->capacity_; i++)
 				
 					{
-						table_[list].clear();
-						list++;
+						table_[i].clear();
+						//delete table_[list];
+						
 					}
+				size_ = 0;
 				
-				}
 			}
 			
 			/**

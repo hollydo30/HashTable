@@ -162,6 +162,7 @@ void existsEntry(const MyRolodex& dex)
 
 */
 
+
 MyHashTable<int> table3;
 table3.add("ab", 1);
 table3.add("bc", 2);
@@ -179,6 +180,7 @@ cout<<table3.exists("dee")<<endl;
 cout<<table3.exists("cd'")<<endl;
 cout<<table3.exists("de..")<<endl;
 cout<<endl;
+cout<<table3.getCollisions()<<endl;
 
 MyHashTable<int> table4 (table3);
 cout<<table4.size()<<endl;
@@ -214,7 +216,6 @@ cout<<endl;
 table3.remove("ab");
 table3.remove("bc");
 table3.remove("cd");
-table3.remove("de");
 cout<<table3.size()<<endl;
 cout<<table3.capacity()<<endl;
 cout<<table3.n_collisions()<<endl;
@@ -224,7 +225,7 @@ cout<<table3.exists("cd")<<endl;
 cout<<table3.exists("de")<<endl;
 cout<<table3.exists("cd'")<<endl;
 cout<<table3.exists("de.")<<endl;
-
+cout<<table3.getCollisions()<<endl;
 
 std::forward_list<std::string> keys3 = table3.getAllKeys(true);
 for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
@@ -232,14 +233,24 @@ for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
 	cout<<*iter;
 	cout<<endl;
 }
+cout<<endl;
+table3.clear();
+cout<<table3.size()<<endl;
 
-std::forward_list<std::string> count = table3.getAllKeys(true);
-for(auto iter = keys3.begin(); iter != keys3.end(); iter++)
+
+std::forward_list<std::string> keys4 = table3.getAllKeys(true);
+for(auto iter = keys4.begin(); iter != keys4.end(); iter++)
 {
 	cout<<*iter;
 	cout<<endl;
 }
+cout<<table3.size()<<endl;
+cout<<table3.getCollisions()<<endl;
+
+
 }
+
+
 
 
 
