@@ -1,6 +1,6 @@
 # Project 4 - My Rolodex
 
-My submission for CPSC 131, Section 07, Project 4
+C++ project demonstrating hash function design, collision handling via chaining, and dynamic resizing behavior.
 
 # My Information
 
